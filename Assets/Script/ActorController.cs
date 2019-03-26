@@ -1,0 +1,125 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
+public class ActorController : MonoBehaviour , ICanObtainSeed {
+
+
+    public float walk_speed;
+    public float rotation_speed;
+    
+    private Rigidbody _cachedRigidbody;
+    private float time = 0.0f;
+    private Vector3 moveDirection;
+
+    public enum State
+    {
+        Get,
+        Put,
+        HaveSeed,
+        HaveWater,
+        Null
+    }
+
+    public State state = State.Null;
+
+    public SeedBehaviour OwnedSeed;
+
+    public AudioClip WarningSFX;
+    public AudioClip GulpSFX;
+
+    public GameObject joint;
+
+    private AudioSource _cachedAudioSource;
+    
+
+
+    Vector3 _dampTemp;
+    private void AxisInputHandle(Vector3 move)
+    {
+        var v = Vector3.Slerp(-transform.forward, move, 0.1f);
+        transform.rotation = Quaternion.FromToRotation(-Vector3.forward, v);
+        move.x *= walk_speed;
+        move.z *= walk_speed;
+        move.y = _cachedRigidbody.velocity.y;
+        _cachedRigidbody.velocity =  move;
+        
+    }
+
+    private void KeyboardInputHandle(KeyCode keyCode)
+    {
+        switch (keyCode)
+        {
+            case KeyCode.E:
+                if (OwnedSeed != null)
+                {
+                    DiscardSeed(OwnedSeed, -transform.forward);
+                    OwnedSeed = null;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    
+    void Start()
+    {
+        _cachedRigidbody = GetComponent<Rigidbody>();
+        _cachedAudioSource = GetComponent<AudioSource>();
+        _cachedAudioSource.loop = false;
+        _cachedAudioSource.playOnAwake = false;
+        InputManager.Current.OnKeyPressed += KeyboardInputHandle;
+        InputManager.Current.OnAxisChanged += AxisInputHandle;
+    }
+
+
+    private void OnTriggerEnter(Collider trigger)
+    {
+        var seed = trigger.GetComponent<SeedBehaviour>();
+        if (seed != null)
+        {
+            ObtainSeed(seed);
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        var seed = other.GetComponent<SeedBehaviour>();
+        if (seed != null)
+        {
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+
+    }
+
+
+    public GameObject GetGO()
+    {
+        return gameObject;
+    }
+
+    public void ObtainSeed(SeedBehaviour seed)
+    {
+        seed.Obtain(this);
+    }
+    
+    public void DiscardSeed(SeedBehaviour seed, Vector3 discardDirection)
+    {
+        seed.Discard(this,discardDirection);
+    }
+
+    public void GetSeed(SeedBehaviour seed)
+    {
+        this.OwnedSeed = seed;
+    }
+
+    public void OwningSeed(SeedBehaviour seed)
+    {
+
+    }
+}

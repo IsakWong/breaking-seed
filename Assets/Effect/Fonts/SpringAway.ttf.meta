@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: f39351913c9f5064b943cf4c21e7dc0a
+timeCreated: 1512956318
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: SpringAway
+  fontNames:
+  - SpringAway
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
