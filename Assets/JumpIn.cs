@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpIn : MonoBehaviour {
+public class JumpIn : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-		GetComponent<Rigidbody>().AddForce(new Vector3(0,8,1.8f),ForceMode.VelocityChange);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Use this for initialization
+    void Start()
+    {
+        GetComponent<Rigidbody>().AddForce(new Vector3(0, 8, 1.8f), ForceMode.VelocityChange);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }

@@ -26,16 +26,16 @@ public class Scr : MonoBehaviour
     }
 
     private Material _cachedMaterial;
-    
+
     public float t = 2;
-	// Update is called once per frame
-	void Update ()
-	{
-	    _max = WaveMax * _passedTime / WaveTime;
-	    _cachedMaterial.SetFloat("_Max", _max);
+    // Update is called once per frame
+    void Update()
+    {
+        _max = WaveMax * _passedTime / WaveTime;
+        _cachedMaterial.SetFloat("_Max", _max);
         _passedTime -= Time.deltaTime;
         if (_passedTime < 0)
             enabled = false;
 
-	}
+    }
 }

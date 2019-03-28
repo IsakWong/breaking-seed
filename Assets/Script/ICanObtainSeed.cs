@@ -8,7 +8,7 @@ public interface ICanObtainSeed
 
     void ObtainSeed(SeedBehaviour seed);
 
-    void DiscardSeed(SeedBehaviour seed,Vector3 discardDirection);
+    void DiscardSeed(SeedBehaviour seed, Vector3 discardDirection);
 
     void GetSeed(SeedBehaviour seed);
 

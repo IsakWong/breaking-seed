@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CloundFly: MonoBehaviour
+public class CloundFly : MonoBehaviour
 {
     private Vector3 _oldPosition;
 
@@ -31,11 +31,11 @@ public class CloundFly: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref _upSpeed, SmoothTime, MaxSpeed);
-            if (Vector3.Magnitude(transform.position - _targetPosition) < 0.01)
-            {
-                transform.position = _oldPosition;
-            }
-        
+        transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref _upSpeed, SmoothTime, MaxSpeed);
+        if (Vector3.Magnitude(transform.position - _targetPosition) < 0.01)
+        {
+            transform.position = _oldPosition;
+        }
+
     }
 }

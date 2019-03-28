@@ -4813,6 +4813,7 @@ GameObject:
   - component: {fileID: 4956269810924034}
   - component: {fileID: 65233235760016000}
   - component: {fileID: 82653967835772868}
+  - component: {fileID: 6048071423536875264}
   m_Layer: 0
   m_Name: "\u5E73\u53F0\u6811\u79CD\u5B50"
   m_TagString: seed
@@ -4944,3 +4945,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6048071423536875264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817041506275326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 651a537f03b0ca747b7e5f85eb4ecda7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GrowNeedWater: 10
+  num_water: 0
+  TreeType: 0
+  hole: {fileID: 0}
+  CurrentState: 0

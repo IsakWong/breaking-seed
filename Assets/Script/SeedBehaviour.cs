@@ -37,6 +37,7 @@ public class SeedBehaviour : MonoBehaviour {
         _audio.loop = false;
     }
 
+    private Vector3 _velocity;
     private float _obtainTime = 0.5f;
     private Vector3 _tmpObtainSpeed = Vector3.zero;
     private Vector3 _tmpDiscardSpeed = Vector3.zero;
@@ -116,6 +117,23 @@ public class SeedBehaviour : MonoBehaviour {
     }
 
     void Update () {
+        switch(CurrentState)
+        {
+            case SeedState.OnGround:
+                break;
+            case SeedState.Obtaining:
+                Vector3 target = Obtainer.GetGO().transform.position;
+                Vector3 newPos = Vector3.SmoothDamp(transform.position, target, ref _velocity, _obtainTime);
+                transform.position = newPos;
+                break;
+            case SeedState.Discarding:
+                break;
+            case SeedState.Obtained:
+                break;
+            default:
+                break;
+
+        }
 		if(num_water>=GrowNeedWater)
         {
             //生长

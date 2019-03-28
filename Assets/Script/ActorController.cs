@@ -4,12 +4,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
-public class ActorController : MonoBehaviour , ICanObtainSeed {
+public class ActorController : MonoBehaviour, ICanObtainSeed
+{
 
 
     public float walk_speed;
     public float rotation_speed;
-    
+
     private Rigidbody _cachedRigidbody;
     private AudioSource _cachedAudioSource;
     private BoxCollider _cachedCollider;
@@ -29,6 +30,7 @@ public class ActorController : MonoBehaviour , ICanObtainSeed {
     public State state = State.Null;
 
     public SeedBehaviour OwnedSeed;
+    public SeedBehaviour TriggerSeed;
 
     public AudioClip WarningSFX;
     public AudioClip GulpSFX;
@@ -45,8 +47,8 @@ public class ActorController : MonoBehaviour , ICanObtainSeed {
         move.x *= walk_speed;
         move.z *= walk_speed;
         move.y = _cachedRigidbody.velocity.y;
-        _cachedRigidbody.velocity =  move;
-        
+        _cachedRigidbody.velocity = move;
+
     }
 
     private void OnKeyboardPressed(KeyCode keyCode)
@@ -96,23 +98,24 @@ public class ActorController : MonoBehaviour , ICanObtainSeed {
 
     private void OnTriggerEnter(Collider trigger)
     {
-        var seed = trigger.GetComponent<SeedBehaviour>();
-        if (seed != null)
+        TriggerSeed = trigger.GetComponent<SeedBehaviour>();
+        if (TriggerSeed != null)
         {
-            ObtainSeed(seed);
+            ObtainSeed(TriggerSeed);
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        var seed = other.GetComponent<SeedBehaviour>();
-        if (seed != null)
+        TriggerSeed = other.GetComponent<SeedBehaviour>();
+        if (TriggerSeed != null)
         {
         }
     }
     private void OnTriggerExit(Collider other)
     {
-
+        if (TriggerSeed == other.GetComponent<SeedBehaviour>())
+            TriggerSeed = null;
     }
 
 
@@ -125,10 +128,10 @@ public class ActorController : MonoBehaviour , ICanObtainSeed {
     {
         seed.Obtain(this);
     }
-    
+
     public void DiscardSeed(SeedBehaviour seed, Vector3 discardDirection)
     {
-        seed.Discard(this,discardDirection);
+        seed.Discard(this, discardDirection);
     }
 
     public void GetSeed(SeedBehaviour seed)

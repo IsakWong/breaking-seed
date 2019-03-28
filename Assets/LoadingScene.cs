@@ -16,33 +16,33 @@ public class LoadingScene : MonoBehaviour
     private AsyncOperation _async;
     private float _loadingTime = 0;
 
-	// Use this for initialization
-	void Start ()
-	{
-	    StartCoroutine(Load());
-	}
+    // Use this for initialization
+    void Start()
+    {
+        StartCoroutine(Load());
+    }
 
     IEnumerator Load()
     {
-        _async = SceneManager.LoadSceneAsync(NextStringName,LoadSceneMode.Single);
+        _async = SceneManager.LoadSceneAsync(NextStringName, LoadSceneMode.Single);
         _async.allowSceneActivation = false;
         yield return _async;
     }
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	    _loadingTime += Time.deltaTime;
-	    if (_loadingTime > LoadingMinTime)
-	    {
-	        LoadingMask.SetActive(true);
+
+    // Update is called once per frame
+    void Update()
+    {
+        _loadingTime += Time.deltaTime;
+        if (_loadingTime > LoadingMinTime)
+        {
+            LoadingMask.SetActive(true);
             if (_async != null)
-	        {
-	            if (LoadingMask.GetComponent<Image>().color.a >=0.99f)
-	            {
-	                _async.allowSceneActivation = true;
-	            }
+            {
+                if (LoadingMask.GetComponent<Image>().color.a >= 0.99f)
+                {
+                    _async.allowSceneActivation = true;
+                }
             }
-	    }
-	}
+        }
+    }
 }

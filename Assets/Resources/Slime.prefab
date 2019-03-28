@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 1883141404}
   - component: {fileID: 1883141405}
   - component: {fileID: 1883141408}
+  - component: {fileID: 8875599967333063540}
   m_Layer: 10
   m_Name: Slime
   m_TagString: Untagged
@@ -325,6 +326,19 @@ MonoBehaviour:
   WarningSFX: {fileID: 0}
   GulpSFX: {fileID: 0}
   joint: {fileID: 1351084601830950}
+--- !u!135 &8875599967333063540
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1546181162628994}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0.06, z: -0.11}
 --- !u!1 &1564942375995086
 GameObject:
   m_ObjectHideFlags: 0

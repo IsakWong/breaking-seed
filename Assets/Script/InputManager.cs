@@ -44,12 +44,13 @@ public class InputManager : MonoBehaviour
     private bool[] _isKeyHold;
 
 
-    void Start () {
+    void Start()
+    {
 
-       
-	    _isKeyDown = new bool[InputKeys.Length];
-	    _isKeyUp = new bool[InputKeys.Length];
-	    _isKeyHold = new bool[InputKeys.Length];
+
+        _isKeyDown = new bool[InputKeys.Length];
+        _isKeyUp = new bool[InputKeys.Length];
+        _isKeyHold = new bool[InputKeys.Length];
     }
 
     private void Awake()
@@ -81,8 +82,8 @@ public class InputManager : MonoBehaviour
                 OnAxisChanged(move);
             }
         }
-      
-        for (int i = 0; i <InputKeys.Length; i++)
+
+        for (int i = 0; i < InputKeys.Length; i++)
         {
             var key = InputKeys[i];
             if (_isKeyDown[i])
@@ -105,25 +106,26 @@ public class InputManager : MonoBehaviour
             }
         }
     }
-	// Update is called once per frame
-	void Update () {
-        if(!IsEnable)
+    // Update is called once per frame
+    void Update()
+    {
+        if (!IsEnable)
             return;
-	    for (int i = 0; i < InputKeys.Length; i++)
-	    {
-	        var key = InputKeys[i];
-	        if (Input.GetKeyDown(key))
-	        {
-	            _isKeyDown[i] = true;
-	        }
-	        if (Input.GetKeyUp(key))
-	        {
-	            _isKeyUp[i] = true;
-	        }
-	        if (Input.GetKey(key))
-	        {
-	            _isKeyHold[i] = true;
-	        }
-	    }
+        for (int i = 0; i < InputKeys.Length; i++)
+        {
+            var key = InputKeys[i];
+            if (Input.GetKeyDown(key))
+            {
+                _isKeyDown[i] = true;
+            }
+            if (Input.GetKeyUp(key))
+            {
+                _isKeyUp[i] = true;
+            }
+            if (Input.GetKey(key))
+            {
+                _isKeyHold[i] = true;
+            }
+        }
     }
 }
