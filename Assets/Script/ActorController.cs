@@ -11,6 +11,9 @@ public class ActorController : MonoBehaviour , ICanObtainSeed {
     public float rotation_speed;
     
     private Rigidbody _cachedRigidbody;
+    private AudioSource _cachedAudioSource;
+    private BoxCollider _cachedCollider;
+
     private float time = 0.0f;
     private Vector3 moveDirection;
 
@@ -32,8 +35,6 @@ public class ActorController : MonoBehaviour , ICanObtainSeed {
 
     public GameObject joint;
 
-    private AudioSource _cachedAudioSource;
-    
 
 
     Vector3 _dampTemp;
@@ -48,7 +49,7 @@ public class ActorController : MonoBehaviour , ICanObtainSeed {
         
     }
 
-    private void KeyboardInputHandle(KeyCode keyCode)
+    private void OnKeyboardPressed(KeyCode keyCode)
     {
         switch (keyCode)
         {
@@ -64,14 +65,31 @@ public class ActorController : MonoBehaviour , ICanObtainSeed {
         }
     }
 
-    
+    private void OnKeyboardReleased(KeyCode keyCode)
+    {
+        switch (keyCode)
+        {
+            case KeyCode.E:
+                if (OwnedSeed != null)
+                {
+                    DiscardSeed(OwnedSeed, -transform.forward);
+                    OwnedSeed = null;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     void Start()
     {
         _cachedRigidbody = GetComponent<Rigidbody>();
+        _cachedCollider = GetComponent<BoxCollider>();
         _cachedAudioSource = GetComponent<AudioSource>();
         _cachedAudioSource.loop = false;
         _cachedAudioSource.playOnAwake = false;
-        InputManager.Current.OnKeyPressed += KeyboardInputHandle;
+        InputManager.Current.OnKeyPressed += OnKeyboardPressed;
+        InputManager.Current.OnKeyReleased += OnKeyboardReleased;
         InputManager.Current.OnAxisChanged += AxisInputHandle;
     }
 

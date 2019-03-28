@@ -19,13 +19,11 @@ public class ButtonAnimation : MonoBehaviour {
     {
         GetComponent<Animator>().SetBool("leave", false);
         GetComponent<Animator>().SetBool("enter", true);
-        Debug.Log(1);
     }
 
     public void OnLeave(BaseEventData data)
     {
         GetComponent<Animator>().SetBool("leave",true);
         GetComponent<Animator>().SetBool("enter", false);
-        Debug.Log(2);
     }
 }
