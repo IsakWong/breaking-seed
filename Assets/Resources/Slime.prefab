@@ -319,10 +319,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c0004d179cf8f4e9e8702f328a34f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walk_speed: 3.5
-  rotation_speed: 0
-  state: 4
-  OwnedSeed: {fileID: 0}
+  WalkSpeed: 4
+  TurnRate: 0
+  OwningItem: {fileID: 0}
+  TriggerItem: {fileID: 0}
   WarningSFX: {fileID: 0}
   GulpSFX: {fileID: 0}
   joint: {fileID: 1351084601830950}
@@ -337,8 +337,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2
-  m_Center: {x: 0, y: 0.06, z: -0.11}
+  m_Radius: 0.25
+  m_Center: {x: 0, y: 0.06, z: -0.05}
 --- !u!1 &1564942375995086
 GameObject:
   m_ObjectHideFlags: 0

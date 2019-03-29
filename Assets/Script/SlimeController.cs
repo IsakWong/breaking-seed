@@ -19,8 +19,8 @@ public class SlimeController : MonoBehaviour, ICanObtainItem
     private Vector3 moveDirection;
     
 
-    public ItemBehaviour OwnedSeed;
-    public ItemBehaviour TriggerSeed;
+    public ItemBehaviour OwningItem;
+    public ItemBehaviour TriggerItem;
 
     public AudioClip WarningSFX;
     public AudioClip GulpSFX;
@@ -46,9 +46,13 @@ public class SlimeController : MonoBehaviour, ICanObtainItem
         switch (keyCode)
         {
             case KeyCode.E:
-                if (OwnedSeed != null)
+                if (OwningItem != null)
                 {
-                    OwnedSeed = null;
+                    BeginDropItem();
+                }
+                else
+                {
+                    BeginObtainItem();
                 }
                 break;
             default:
@@ -58,22 +62,6 @@ public class SlimeController : MonoBehaviour, ICanObtainItem
 
     private void OnKeyboardReleased(KeyCode keyCode)
     {
-        switch (keyCode)
-        {
-            case KeyCode.E:
-                if (OwnedSeed != null)
-                {
-                    DropItem(OwnedSeed, -transform.forward);
-                    OwnedSeed = null;
-                }
-                else
-                {
-                    
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     void Start()
@@ -87,43 +75,54 @@ public class SlimeController : MonoBehaviour, ICanObtainItem
         InputManager.Current.OnKeyReleased += OnKeyboardReleased;
         InputManager.Current.OnAxisChanged += AxisInputHandle;
     }
-
-    public void ObtainItem()
+    
+    public void ObtainItem(ItemBehaviour Item)
     {
-        if(TriggerSeed != null)
+        if (Item != null)
         {
-            TriggerSeed.CurrentState = ItemBehaviour.ItemState.Obtaining;
-            TriggerSeed.Owner = this;
+            OwningItem = Item;
         }
     }
-
-    public void DropItem()
+    public void DropItem(ItemBehaviour Item)
     {
-        if (OwnedSeed != null)
+        if (OwningItem != null)
         {
-            TriggerSeed.CurrentState = ItemBehaviour.ItemState.Discarding;
-            TriggerSeed.Owner = this;
+            OwningItem = null;
         }
     }
-
     private void OnTriggerEnter(Collider trigger)
     {
-        TriggerSeed = trigger.GetComponent<ItemBehaviour>();
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-
-    }
+        TriggerItem = trigger.GetComponent<ItemBehaviour>();
+    }    
     private void OnTriggerExit(Collider other)
     {
-        if (TriggerSeed == other.GetComponent<ItemBehaviour>())
-            TriggerSeed = null;
+        if (TriggerItem == other.GetComponent<ItemBehaviour>())
+            TriggerItem = null;
     }
 
     public GameObject GetGO()
     {
         return gameObject;
     }
-    
+
+    public void BeginObtainItem()
+    {
+        if(TriggerItem != null)
+        {
+            TriggerItem.CurrentState = ItemBehaviour.ItemState.Obtaining;
+            TriggerItem.Obtainer = this;
+        }
+    }
+    public Vector3 GetObtainLocation()
+    {
+        return transform.GetChild(0).transform.position;
+    }
+    public void BeginDropItem()
+    {
+        if (OwningItem != null)
+        {
+            OwningItem.CurrentState = ItemBehaviour.ItemState.Discarding;
+            OwningItem.Owner = null;
+        }
+    }
 }

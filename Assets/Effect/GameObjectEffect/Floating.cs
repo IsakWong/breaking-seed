@@ -5,6 +5,7 @@ using UnityEngine;
 public class Floating : MonoBehaviour
 {
     private Vector3 _offset = Vector3.zero;
+    private Vector3 _startPosition = Vector3.zero;
 
     public float y = 0.1f;
     public float x = 0f;
@@ -18,12 +19,26 @@ public class Floating : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-	    
-	    _targetOffset = _offset;
+        _startPosition = transform.position;
+        _targetOffset = _offset;
 	    _targetOffset.y += y;
 
 	}
 
+    public void SetFloatingEnable(bool value)
+    {
+        if(value)
+        {
+            _targetOffset = _offset;
+            _targetOffset.y += y;
+        }
+        else
+        {
+            _offset = Vector3.zero;
+            _targetOffset = Vector3.zero;
+
+        }
+    }
     private Vector3 _upSpeed;
 
     private Vector3 _downSpeed;
@@ -32,8 +47,7 @@ public class Floating : MonoBehaviour
 	    if (up)
 	    {
             _offset = Vector3.SmoothDamp(_offset, _targetOffset, ref _upSpeed, SmoothTime, MaxSpeed);
-	        if (transform.parent != null)
-	            transform.position = transform.parent.transform.position + _offset;
+            transform.position = _startPosition + _offset;
             if (Vector3.Magnitude(_offset - _targetOffset) < 0.01)
 	        {
                 _targetOffset.y = -2 * y;
@@ -44,8 +58,7 @@ public class Floating : MonoBehaviour
 	    else
 	    {
 	        _offset = Vector3.SmoothDamp(_offset, _targetOffset, ref _downSpeed, SmoothTime, MaxSpeed);
-            if(transform.parent != null)
-                transform.position = transform.parent.transform.position + _offset;
+            transform.position = _startPosition + _offset;
             if (Vector3.Magnitude(_offset - _targetOffset) < 0.01)
 	        {
                 _targetOffset.y = 2 * y;

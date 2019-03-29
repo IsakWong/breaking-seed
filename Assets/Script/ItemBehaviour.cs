@@ -30,7 +30,7 @@ public class ItemBehaviour : MonoBehaviour {
     public ICanObtainItem Obtainer = null;
     public ICanObtainItem Owner = null;
 
-    public ItemState CurrentState = ItemState.OnGround;
+    public ItemState currentState = ItemState.OnGround;
 
 	void Start () {
         _audio = GetComponent<AudioSource>();
@@ -45,6 +45,7 @@ public class ItemBehaviour : MonoBehaviour {
     private float _discardSpeed = 3f;
     private Vector3 discardDirection = Vector3.zero;
 
+
     private void FixedUpdate()
     {
         switch (CurrentState)
@@ -52,18 +53,17 @@ public class ItemBehaviour : MonoBehaviour {
             case ItemState.OnGround:
                 break;
             case ItemState.Obtaining:
-                GetComponentInParent<Rigidbody>().useGravity = false;
-                Vector3 oldPosition = transform.parent.transform.position;
-                Vector3 targetPosition = Obtainer.GetGO().transform.position;
+                Vector3 oldPosition = transform.position;
+                Vector3 targetPosition = Obtainer.GetObtainLocation();
                 Vector3 newPosition = Vector3.SmoothDamp(oldPosition, targetPosition, ref _tmpObtainSpeed, _obtainTime);
                 _obtainTime -= Time.fixedDeltaTime;
-                if ((transform.parent.transform.position - targetPosition).magnitude < 0.01)
+                if ((transform.position - targetPosition).magnitude < 0.01)
                 {
                     Owner = Obtainer;
-                    Obtainer.GetSeed(this);
+                    Obtainer.ObtainItem(this);
                     CurrentState = ItemState.Obtained;
                 }
-                transform.parent.transform.position = newPosition;
+                transform.position = newPosition;
                 break;
             
             case ItemState.Discarding:
@@ -74,7 +74,7 @@ public class ItemBehaviour : MonoBehaviour {
                 }
                 break;
             case ItemState.Obtained:
-                transform.parent.transform.position = Owner.GetGO().transform.position;
+                transform.position = Obtainer.GetObtainLocation();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
