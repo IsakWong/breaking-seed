@@ -4,12 +4,12 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
-public class ActorController : MonoBehaviour, ICanObtainSeed
+public class SlimeController : MonoBehaviour, ICanObtainItem
 {
 
 
-    public float walk_speed;
-    public float rotation_speed;
+    public float WalkSpeed;
+    public float TurnRate;
 
     private Rigidbody _cachedRigidbody;
     private AudioSource _cachedAudioSource;
@@ -17,20 +17,10 @@ public class ActorController : MonoBehaviour, ICanObtainSeed
 
     private float time = 0.0f;
     private Vector3 moveDirection;
+    
 
-    public enum State
-    {
-        Get,
-        Put,
-        HaveSeed,
-        HaveWater,
-        Null
-    }
-
-    public State state = State.Null;
-
-    public SeedBehaviour OwnedSeed;
-    public SeedBehaviour TriggerSeed;
+    public ItemBehaviour OwnedSeed;
+    public ItemBehaviour TriggerSeed;
 
     public AudioClip WarningSFX;
     public AudioClip GulpSFX;
@@ -44,8 +34,8 @@ public class ActorController : MonoBehaviour, ICanObtainSeed
     {
         var v = Vector3.Slerp(-transform.forward, move, 0.1f);
         transform.rotation = Quaternion.FromToRotation(-Vector3.forward, v);
-        move.x *= walk_speed;
-        move.z *= walk_speed;
+        move.x *= WalkSpeed;
+        move.z *= WalkSpeed;
         move.y = _cachedRigidbody.velocity.y;
         _cachedRigidbody.velocity = move;
 
@@ -58,7 +48,6 @@ public class ActorController : MonoBehaviour, ICanObtainSeed
             case KeyCode.E:
                 if (OwnedSeed != null)
                 {
-                    DiscardSeed(OwnedSeed, -transform.forward);
                     OwnedSeed = null;
                 }
                 break;
@@ -74,8 +63,12 @@ public class ActorController : MonoBehaviour, ICanObtainSeed
             case KeyCode.E:
                 if (OwnedSeed != null)
                 {
-                    DiscardSeed(OwnedSeed, -transform.forward);
+                    DropItem(OwnedSeed, -transform.forward);
                     OwnedSeed = null;
+                }
+                else
+                {
+                    
                 }
                 break;
             default:
@@ -95,52 +88,42 @@ public class ActorController : MonoBehaviour, ICanObtainSeed
         InputManager.Current.OnAxisChanged += AxisInputHandle;
     }
 
+    public void ObtainItem()
+    {
+        if(TriggerSeed != null)
+        {
+            TriggerSeed.CurrentState = ItemBehaviour.ItemState.Obtaining;
+            TriggerSeed.Owner = this;
+        }
+    }
+
+    public void DropItem()
+    {
+        if (OwnedSeed != null)
+        {
+            TriggerSeed.CurrentState = ItemBehaviour.ItemState.Discarding;
+            TriggerSeed.Owner = this;
+        }
+    }
 
     private void OnTriggerEnter(Collider trigger)
     {
-        TriggerSeed = trigger.GetComponent<SeedBehaviour>();
-        if (TriggerSeed != null)
-        {
-            ObtainSeed(TriggerSeed);
-        }
+        TriggerSeed = trigger.GetComponent<ItemBehaviour>();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        TriggerSeed = other.GetComponent<SeedBehaviour>();
-        if (TriggerSeed != null)
-        {
-        }
+
     }
     private void OnTriggerExit(Collider other)
     {
-        if (TriggerSeed == other.GetComponent<SeedBehaviour>())
+        if (TriggerSeed == other.GetComponent<ItemBehaviour>())
             TriggerSeed = null;
     }
-
 
     public GameObject GetGO()
     {
         return gameObject;
     }
-
-    public void ObtainSeed(SeedBehaviour seed)
-    {
-        seed.Obtain(this);
-    }
-
-    public void DiscardSeed(SeedBehaviour seed, Vector3 discardDirection)
-    {
-        seed.Discard(this, discardDirection);
-    }
-
-    public void GetSeed(SeedBehaviour seed)
-    {
-        this.OwnedSeed = seed;
-    }
-
-    public void OwningSeed(SeedBehaviour seed)
-    {
-
-    }
+    
 }

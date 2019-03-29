@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SeedBehaviour : MonoBehaviour {
+public class ItemBehaviour : MonoBehaviour {
 
     public enum TreeSeedType : uint
     {
@@ -19,7 +19,7 @@ public class SeedBehaviour : MonoBehaviour {
     public GameObject hole;
     private AudioSource _audio;
 
-    public enum SeedState : uint
+    public enum ItemState : uint
     {
         OnGround,
         Obtaining,
@@ -27,10 +27,10 @@ public class SeedBehaviour : MonoBehaviour {
         Obtained
     }
 
-    public ICanObtainSeed Obtainer = null;
-    public ICanObtainSeed Owner = null;
+    public ICanObtainItem Obtainer = null;
+    public ICanObtainItem Owner = null;
 
-    public SeedState CurrentState = SeedState.OnGround;
+    public ItemState CurrentState = ItemState.OnGround;
 
 	void Start () {
         _audio = GetComponent<AudioSource>();
@@ -49,9 +49,9 @@ public class SeedBehaviour : MonoBehaviour {
     {
         switch (CurrentState)
         {
-            case SeedState.OnGround:
+            case ItemState.OnGround:
                 break;
-            case SeedState.Obtaining:
+            case ItemState.Obtaining:
                 GetComponentInParent<Rigidbody>().useGravity = false;
                 Vector3 oldPosition = transform.parent.transform.position;
                 Vector3 targetPosition = Obtainer.GetGO().transform.position;
@@ -61,19 +61,19 @@ public class SeedBehaviour : MonoBehaviour {
                 {
                     Owner = Obtainer;
                     Obtainer.GetSeed(this);
-                    CurrentState = SeedState.Obtained;
+                    CurrentState = ItemState.Obtained;
                 }
                 transform.parent.transform.position = newPosition;
                 break;
             
-            case SeedState.Discarding:
+            case ItemState.Discarding:
                 _discardTime += Time.fixedDeltaTime;
                 if (_discardTime >= 0.3f)
                 {
-                    CurrentState = SeedState.OnGround;
+                    CurrentState = ItemState.OnGround;
                 }
                 break;
-            case SeedState.Obtained:
+            case ItemState.Obtained:
                 transform.parent.transform.position = Owner.GetGO().transform.position;
                 break;
             default:
@@ -81,35 +81,35 @@ public class SeedBehaviour : MonoBehaviour {
         }
     }
 
-    public void Obtain(ICanObtainSeed obtainer)
+    public void Obtain(ICanObtainItem obtainer)
     {
         switch (CurrentState)
         {
-            case SeedState.OnGround:
+            case ItemState.OnGround:
                 
                 Obtainer = obtainer;
                 _obtainTime = 0.5f;
-                CurrentState = SeedState.Obtaining;
+                CurrentState = ItemState.Obtaining;
                 break;
-            case SeedState.Obtained:
+            case ItemState.Obtained:
                 if (obtainer == Obtainer)
                     break;
                 Obtainer = obtainer;
                 _obtainTime = 0.5f;
-                CurrentState = SeedState.Obtaining;
+                CurrentState = ItemState.Obtaining;
                 break;
         }
     }
-    public void Discard(ICanObtainSeed owner, Vector3 discardDirection)
+    public void Discard(ICanObtainItem owner, Vector3 discardDirection)
     {
         GetComponentInParent<Rigidbody>().AddForce(discardDirection * 1, ForceMode.VelocityChange);
         switch (CurrentState)
         {
-            case SeedState.Obtained:
+            case ItemState.Obtained:
                 this.discardDirection = discardDirection;
                 Obtainer = null;
                 Owner = null;
-                CurrentState = SeedState.Discarding;
+                CurrentState = ItemState.Discarding;
                 _discardTime = 0f;
                 break;
         }
@@ -119,16 +119,16 @@ public class SeedBehaviour : MonoBehaviour {
     void Update () {
         switch(CurrentState)
         {
-            case SeedState.OnGround:
+            case ItemState.OnGround:
                 break;
-            case SeedState.Obtaining:
+            case ItemState.Obtaining:
                 Vector3 target = Obtainer.GetGO().transform.position;
                 Vector3 newPos = Vector3.SmoothDamp(transform.position, target, ref _velocity, _obtainTime);
                 transform.position = newPos;
                 break;
-            case SeedState.Discarding:
+            case ItemState.Discarding:
                 break;
-            case SeedState.Obtained:
+            case ItemState.Obtained:
                 break;
             default:
                 break;
