@@ -10,6 +10,7 @@ public class SlimeController : MonoBehaviour, ICanObtainItem
 
     public float WalkSpeed;
     public float TurnRate;
+    public SlimeTrigger slimeTrigger;
 
     private Rigidbody _cachedRigidbody;
     private AudioSource _cachedAudioSource;
@@ -20,7 +21,6 @@ public class SlimeController : MonoBehaviour, ICanObtainItem
     
 
     public ItemBehaviour OwningItem;
-    public ItemBehaviour TriggerItem;
 
     public AudioClip WarningSFX;
     public AudioClip GulpSFX;
@@ -90,15 +90,6 @@ public class SlimeController : MonoBehaviour, ICanObtainItem
             OwningItem = null;
         }
     }
-    private void OnTriggerEnter(Collider trigger)
-    {
-        TriggerItem = trigger.GetComponent<ItemBehaviour>();
-    }    
-    private void OnTriggerExit(Collider other)
-    {
-        if (TriggerItem == other.GetComponent<ItemBehaviour>())
-            TriggerItem = null;
-    }
 
     public GameObject GetGO()
     {
@@ -107,10 +98,10 @@ public class SlimeController : MonoBehaviour, ICanObtainItem
 
     public void BeginObtainItem()
     {
-        if(TriggerItem != null)
+        if(slimeTrigger.TriggerItem != null)
         {
-            TriggerItem.CurrentState = ItemBehaviour.ItemState.Obtaining;
-            TriggerItem.Obtainer = this;
+            slimeTrigger.TriggerItem.CurrentState = ItemBehaviour.ItemState.Obtaining;
+            slimeTrigger.TriggerItem.Obtainer = this;
         }
     }
     public Vector3 GetObtainLocation()

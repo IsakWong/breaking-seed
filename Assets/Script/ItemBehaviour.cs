@@ -18,6 +18,7 @@ public class ItemBehaviour : MonoBehaviour {
     public TreeSeedType TreeType;
     public GameObject hole;
     private AudioSource _audio;
+    public SlimeTrigger slimeTrigger;
 
     public enum ItemState : uint
     {
@@ -30,8 +31,31 @@ public class ItemBehaviour : MonoBehaviour {
     public ICanObtainItem Obtainer = null;
     public ICanObtainItem Owner = null;
 
-    public ItemState currentState = ItemState.OnGround;
+    private ItemState currentState = ItemState.OnGround;
 
+    public ItemState CurrentState
+    {
+        get
+        {
+            return currentState;
+        }
+        set
+        {
+            switch(value)
+            {
+                case ItemState.Obtaining:
+                    GetComponentInChildren<Floating>().SetFloatingEnable(false);
+                    break;
+                case ItemState.Obtained:
+                    GetComponentInChildren<Floating>().SetFloatingEnable(false);
+                    break;
+                case ItemState.OnGround:
+                    GetComponentInChildren<Floating>().SetFloatingEnable(true);
+                    break;
+            }
+            currentState = value;
+        }
+    }
 	void Start () {
         _audio = GetComponent<AudioSource>();
         _audio.loop = false;

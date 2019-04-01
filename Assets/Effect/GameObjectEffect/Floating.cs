@@ -19,7 +19,7 @@ public class Floating : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-        _startPosition = transform.position;
+        _startPosition = transform.localPosition;
         _targetOffset = _offset;
 	    _targetOffset.y += y;
 
@@ -36,7 +36,7 @@ public class Floating : MonoBehaviour
         {
             _offset = Vector3.zero;
             _targetOffset = Vector3.zero;
-
+            y = 0;
         }
     }
     private Vector3 _upSpeed;
@@ -47,7 +47,10 @@ public class Floating : MonoBehaviour
 	    if (up)
 	    {
             _offset = Vector3.SmoothDamp(_offset, _targetOffset, ref _upSpeed, SmoothTime, MaxSpeed);
-            transform.position = _startPosition + _offset;
+            Vector3 pos = transform.localPosition;
+            pos.y = _startPosition.y;
+            pos += _offset;
+            transform.localPosition = pos;
             if (Vector3.Magnitude(_offset - _targetOffset) < 0.01)
 	        {
                 _targetOffset.y = -2 * y;
@@ -58,7 +61,10 @@ public class Floating : MonoBehaviour
 	    else
 	    {
 	        _offset = Vector3.SmoothDamp(_offset, _targetOffset, ref _downSpeed, SmoothTime, MaxSpeed);
-            transform.position = _startPosition + _offset;
+            Vector3 pos = transform.localPosition;
+            pos.y = _startPosition.y;
+            pos += _offset;
+            transform.localPosition = pos;
             if (Vector3.Magnitude(_offset - _targetOffset) < 0.01)
 	        {
                 _targetOffset.y = 2 * y;
